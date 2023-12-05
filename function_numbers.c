@@ -69,7 +69,7 @@ int print_octal(va_list types, char buff[],
 		num /= 8;
 	}
 
-	if (flags & F_HASH && init_num != 0)
+	if (flg & F_HASH && init_num != 0)
 		buff[i--] = '0';
 
 	i++;

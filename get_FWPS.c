@@ -1,13 +1,13 @@
 #include "main.h"
 
 /**
- * get_flg - Calculates active flags
+ * get_flags - Calculates active flags
  * @format: Formatted string in which to print the arguments
  * @i: take a parameter.
  *
  * Return: Flags:
  */
-int get_flg(const char *format, int *i)
+int get_flags(const char *format, int *i)
 {
 	/* - + 0 # ' ' */
 	/* 1 2 4 8  16 */
@@ -21,7 +21,7 @@ int get_flg(const char *format, int *i)
 		for (j = 0; FLAGS_CH[j] != '\0'; j++)
 			if (format[curr_i] == FLAGS_CH[j])
 			{
-				flags |= FLAGS_ARR[j];
+				flg |= FLAGS_ARR[j];
 				break;
 			}
 
@@ -70,14 +70,14 @@ int get_width(const char *format, int *i, va_list list)
 }
 
 /**
- * get_pre - Calculates the precision for printing
+ * get_precision - Calculates the precision for printing
  * @format: Formatted string in which to print the arguments
  * @i: List of arguments to be printed.
  * @list: list of arguments.
  *
  * Return: Precision.
  */
-int get_pre(const char *format, int *i, va_list list)
+int get_precision(const char *format, int *i, va_list list)
 {
 	int curr_i = *i + 1;
 	int pre = -1;
