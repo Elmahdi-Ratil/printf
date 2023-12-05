@@ -193,3 +193,60 @@ int write_unsgnd(int is_negative, int ind,
 
 	return (write(1, &buff[ind], length));
 }
+/*** WRITE POINTER ***/
+/**
+ * write_pointer - Write a memory address
+ * @buff: Arrays of chars
+ * @ind: Index at which the number starts in the buffer
+ * @length: Length of number
+ * @width: Wwidth specifier
+ * @flg: Flags specifier
+ * @padd: Char representing the padding
+ * @extra_c: Char representing extra char
+ * @padd_start: Index at which padding should start
+ *
+ * Return: Number of written chars.
+ */
+int write_pointer(char buff[], int ind, int length,
+	int width, int flg, char padd, char extra_c, int padd_start)
+{
+	int i;
+
+	if (width > length)
+	{
+		for (i = 3; i < width - length + 3; i++)
+			buff[i] = padd;
+		buff[i] = '\0';
+		if (flg & F_MINUS && padd == ' ')/* Asign extra char to left of buffer */
+		{
+			buff[--ind] = 'x';
+			buff[--ind] = '0';
+			if (extra_c)
+				buff[--ind] = extra_c;
+			return (write(1, &buff[ind], length) + write(1, &buff[3], i - 3));
+		}
+		else if (!(flg & F_MINUS) && padd == ' ')/* extra char to left of buffer */
+		{
+			buff[--ind] = 'x';
+			buff[--ind] = '0';
+			if (extra_c)
+				buff[--ind] = extra_c;
+			return (write(1, &buff[3], i - 3) + write(1, &buff[ind], length));
+		}
+		else if (!(flg & F_MINUS) && padd == '0')/* extra char to left of padd */
+		{
+			if (extra_c)
+				buff[--padd_start] = extra_c;
+			buff[1] = '0';
+			buff[2] = 'x';
+			return (write(1, &buff[padd_start], i - padd_start) +
+				write(1, &buff[ind], length - (1 - padd_start) - 2));
+		}
+	}
+	buff[--ind] = 'x';
+	buff[--ind] = '0';
+	if (extra_c)
+		buff[--ind] = extra_c;
+	return (write(1, &buff[ind], BUFF_SIZE - ind - 1));
+}
+
