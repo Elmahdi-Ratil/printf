@@ -92,4 +92,98 @@ int print_pointer(va_list types, char buff[],
 		width, flg, padd, extra_c, padd_start));
 }
 
+/*** PRINT REVERSE ***/
+/**
+ * print_reverse - Prints reverse string.
+ * @types: Lista of arguments
+ * @buff: Buffer array to handle print
+ * @flg:  Calculates active flags
+ * @width: get width
+ * @pre: Precision specification
+ * @size: Size specifier
+ * Return: Numbers of chars printed
+ */
 
+int print_reverse(va_list types, char buff[],
+	int flg, int width, int pre, int size)
+{
+	char *str;
+	int i, count = 0;
+
+	UNUSED(buff);
+	UNUSED(flg);
+	UNUSED(width);
+	UNUSED(size);
+
+	str = va_arg(types, char *);
+
+	if (str == NULL)
+	{
+		UNUSED(pre);
+
+		str = ")Null(";
+	}
+	for (i = 0; str[i]; i++)
+		;
+
+	for (i = i - 1; i >= 0; i--)
+	{
+		char z = str[i];
+
+		write(1, &z, 1);
+		count++;
+	}
+	return (count);
+}
+
+/*** PRINT A STRING IN ROT13 ***/
+/**
+ * print_rot13 - Print a string in rot13.
+ * @types: Lista of arguments
+ * @buff: Buffer array to handle print
+ * @flg:  Calculates active flags
+ * @width: get width
+ * @pre: Precision specification
+ * @size: Size specifier
+ * Return: Numbers of chars printed
+ */
+int print_rot13(va_list types, char buff[],
+	int flg, int width, int pre, int size)
+{
+	char x;
+	char *str;
+	unsigned int i, j;
+	int count = 0;
+	char in[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	char out[] = "NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm";
+
+	str = va_arg(types, char *);
+	UNUSED(buff);
+	UNUSED(flg);
+	UNUSED(width);
+	UNUSED(pre);
+	UNUSED(size);
+
+	if (str == NULL)
+		str = "(AHYY)";
+	for (i = 0; str[i]; i++)
+	{
+		for (j = 0; in[j]; j++)
+		{
+			if (in[j] == str[i])
+			{
+				x = out[j];
+				write(1, &x, 1);
+				count++;
+				break;
+			}
+		}
+		if (!in[j])
+		{
+			x = str[i];
+			write(1, &x, 1);
+			count++;
+		}
+	}
+	return (count);
+}
