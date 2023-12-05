@@ -135,3 +135,61 @@ int write_num(int ind, char buff[],
 		buff[--ind] = extra_c;
 	return (write(1, &buff[ind], length));
 }
+/*** WRITE UNSGND ***/
+/**
+ * write_unsgnd - Writes an unsigned number
+ * @is_negative: Number indicating if the num is negative
+ * @ind: Index at which the number starts in the buffer
+ * @buff: Array of chars
+ * @flg: Flags specifiers
+ * @width: Width specifier
+ * @pre: Precision specifier
+ * @size: Size specifier
+ *
+ * Return: Number of written chars.
+ */
+int write_unsgnd(int is_negative, int ind,
+	char buff[],
+	int flg, int width, int pre, int size)
+{
+	/* The number is stored at the bufer's right and starts at position i */
+	int length = BUFF_SIZE - ind - 1, i = 0;
+	char padd = ' ';
+
+	UNUSED(is_negative);
+	UNUSED(size);
+
+	if (pre == 0 && ind == BUFF_SIZE - 2 && buff[ind] == '0')
+		return (0); /* printf(".0d", 0)  no char is printed */
+
+	if (pre > 0 && pre < length)
+		padd = ' ';
+
+	while (pre > length)
+	{
+		buff[--ind] = '0';
+		length++;
+	}
+
+	if ((flg & F_ZERO) && !(flg & F_MINUS))
+		padd = '0';
+
+	if (width > length)
+	{
+		for (i = 0; i < width - length; i++)
+			buff[i] = padd;
+
+		buff[i] = '\0';
+
+		if (flg & F_MINUS) /* Asign extra char to left of buffer [buffer>padd]*/
+		{
+			return (write(1, &buff[ind], length) + write(1, &buff[0], i));
+		}
+		else /* Asign extra char to left of padding [padd>buffer]*/
+		{
+			return (write(1, &buff[0], i) + write(1, &buff[ind], length));
+		}
+	}
+
+	return (write(1, &buff[ind], length));
+}
